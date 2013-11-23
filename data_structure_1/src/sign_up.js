@@ -36,23 +36,23 @@ SignUp.render_sign_ups = function (activity_name) {
 
 function notify_sms_received(sms_json) {
     var SMSObj = SignUp.change_to_obj(sms_json)
-    var mark= SMSObj.text.substring(0,2).toUpperCase()
+    var mark = SMSObj.text.substring(0, 2).toUpperCase()
     var phone = SMSObj.phone
     if (localStorage.is_signing_up == 'true') {
-        if(mark=="BM"){
+        if (mark == "BM") {
             var name = SMSObj.text.substring(2).replace(/^\s+|\s+$/g, '')
-            return process_activity_sign_up(name,phone)
+            return process_activity_sign_up(name, phone)
         }
     }
-    if(localStorage.is_bidding=="true"){
-        if(mark=='JJ'){
-            var bid=SMSObj.text.substring(2).replace(/^\s+|\s+$/g, '')
-            return process_bidding(bid,phone)
+    if (localStorage.is_bidding == "true") {
+        if (mark == 'JJ') {
+            var bid = SMSObj.text.substring(2).replace(/^\s+|\s+$/g, '')
+            return process_bidding(bid, phone)
         }
     }
 }
 
-function process_activity_sign_up(name,phone){
+function process_activity_sign_up(name, phone) {
     var current_sign = new SignUp(name, phone)
     var local_activity_list = _.map(JSON.parse(localStorage.activities), function (i_activity) {
         if (i_activity.name == localStorage.current_activity) {
