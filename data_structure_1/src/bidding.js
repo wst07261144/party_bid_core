@@ -4,16 +4,16 @@ function bidding(name, phone, price) {
     this.price = price;
 }
 
-bidding.find_current_activity_info = function () {
+bidding.find_current_activity_info = function (activity_name) {
     return  _.find(JSON.parse(localStorage.activities), function (i_activity) {
-        if (i_activity.name == localStorage.current_activity) {
+        if (i_activity.name == activity_name) {
             return  i_activity
         }
     })
 }
 bidding.get_name = function (phone) {
     var current_name;
-    var current_activity_info = bidding.find_current_activity_info()
+    var current_activity_info = bidding.find_current_activity_info(localStorage.current_activity)
     _.map(current_activity_info.sign_ups, function (i_sign) {
         if (i_sign.phone == phone) {
             current_name = i_sign.name
