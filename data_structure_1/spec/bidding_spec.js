@@ -37,6 +37,7 @@ describe("Bidding", function() {
         localStorage.current_activity = "second activity";
         localStorage.current_bid = "竞价1";
         localStorage.is_bidding = "";
+        localStorage.counter="1"
     });
 
     afterEach(function(){
@@ -46,6 +47,7 @@ describe("Bidding", function() {
     it("should bid successfully when it is bidding and user has signed up", function(){
         var phone_no = "13600000000";
         var sms_json = build_sms_json("JJ12", phone_no);
+
         localStorage.is_bidding = "true";
         notify_sms_received(sms_json);
 
