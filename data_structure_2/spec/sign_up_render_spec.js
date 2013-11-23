@@ -43,7 +43,7 @@ describe("SignUp Render", function() {
 
 
     it("should show all signed up users by activity name", function(){
-        var sign_ups = sign_up.render_sign_ups("second activity");
+        var sign_ups = SignUp.render_sign_ups("second activity");
 
         expect(sign_ups.length).toBe(3);
         expect(sign_ups[0].name).toBe("仝键");
