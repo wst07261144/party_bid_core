@@ -35,23 +35,21 @@ bidding.judge_repeat_name = function (i_bids, phone) {
 }
 
 function process_bidding(bid, phone) {
-    if (localStorage.is_bidding == "true") {
-        if (bidding.get_name(phone)) {
-            var local_activity_list = _.map(JSON.parse(localStorage.activities), function (i_activity) {
-                if (i_activity.name == localStorage.current_activity) {
-                    _.map(i_activity.bids, function (i_bid) {
-                        if (i_bid.name == "竞价" + Number(localStorage.counter)) {
-                            if (bidding.judge_repeat_name(i_bid, phone) != "true") {
-                                var bidder = new bidding(bidding.get_name(phone), phone, bid)
-                                i_bid.biddings.push(bidder)
-                            }
+    if (bidding.get_name(phone)) {
+        var local_activity_list = _.map(JSON.parse(localStorage.activities), function (i_activity) {
+            if (i_activity.name == localStorage.current_activity) {
+                _.map(i_activity.bids, function (i_bid) {
+                    if (i_bid.name == "竞价" + Number(localStorage.counter)) {
+                        if (bidding.judge_repeat_name(i_bid, phone) != "true") {
+                            var bidder = new bidding(bidding.get_name(phone), phone, bid)
+                            i_bid.biddings.push(bidder)
                         }
-                        return i_bid
-                    })
-                }
-                return i_activity
-            })
-            localStorage.activities = JSON.stringify(local_activity_list)
-        }
+                    }
+                    return i_bid
+                })
+            }
+            return i_activity
+        })
+        localStorage.activities = JSON.stringify(local_activity_list)
     }
 }
