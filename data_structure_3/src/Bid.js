@@ -12,5 +12,4 @@ Bid.create_new_bid=function(current_id){
     var bids_json=JSON.parse(localStorage.bids)
     bids_json.push(new Bid(name))
     localStorage.bids=JSON.stringify(bids_json)
-    console.log(localStorage.bids)
 }
