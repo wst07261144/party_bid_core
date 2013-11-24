@@ -56,7 +56,12 @@ SignUp.judge_repeat_name = function (phone) {
     return repeat
 }
 
-
+SignUp.render_sign_ups = function (activity_name) {
+    var current_sign_up= _.filter(JSON.parse(localStorage.sign_ups),function(sign_up){
+        return sign_up.activity_id==localStorage.current_activity
+    })
+    return  current_sign_up
+}
 
 
 
