@@ -2,12 +2,12 @@ function Bid(phone, price) {
     this.phone = phone;
     this.price = price;
 }
-Bid.judge_has_signed=function(phone){
+Bid.judge_has_signed = function (phone) {
     var signed
-    var activities=JSON.parse(localStorage.activities)
-    _.each(activities[localStorage.current_activity_id].sign_ups,function(sign_up){
-        if(Number(sign_up.phone)==Number(phone)){
-            signed='true'
+    var activities = JSON.parse(localStorage.activities)
+    _.each(activities[localStorage.current_activity].sign_ups, function (sign_up) {
+        if (Number(sign_up.phone) == Number(phone)) {
+            signed = 'true'
         }
     })
     return signed
@@ -15,57 +15,57 @@ Bid.judge_has_signed=function(phone){
 }
 Bid.judge_repeat_bid = function (phone) {
     var repeat
-    var activities=JSON.parse(localStorage.activities)
-    _.each(activities[localStorage.current_activity_id].biddings[localStorage.current_bid]
-        ,function(sign_up){
-        if(Number(sign_up.phone)==Number(phone)){
-            repeat='true'
-        }
-    })
+    var activities = JSON.parse(localStorage.activities)
+    _.each(activities[localStorage.current_activity].biddings[localStorage.current_bid]
+        , function (sign_up) {
+            if (Number(sign_up.phone) == Number(phone)) {
+                repeat = 'true'
+            }
+        })
     return repeat
 }
 
 function process_bidding(bid, phone) {
-    var activities=JSON.parse(localStorage.activities)
-    var bidder=new Bid(phone, bid)
-    if(Bid.judge_has_signed(phone)=='true'){
-        if(Bid.judge_repeat_bid(phone)!='true'){
-            activities[localStorage.current_activity_id].biddings[localStorage.current_bid].push(bidder)
+    var activities = JSON.parse(localStorage.activities)
+    var bidder = new Bid(phone, bid)
+    if (Bid.judge_has_signed(phone) == 'true') {
+        if (Bid.judge_repeat_bid(phone) != 'true') {
+            activities[localStorage.current_activity].biddings[localStorage.current_bid].push(bidder)
             localStorage.activities = JSON.stringify(activities)
         }
     }
 }
 
-function transform_bids_to_view_model(current_activity){
-    var activities=JSON.parse(localStorage.activities)
+function transform_bids_to_view_model(current_activity) {
+    var activities = JSON.parse(localStorage.activities)
     return activities[current_activity].bids
 }
 
-function find_name(current_activity,phone){
-    var activities=JSON.parse(localStorage.activities)
-    var bid_info= activities[current_activity].sign_ups
-    var find_info= _.find(bid_info,function(sign_up){
-        if(sign_up.phone==phone){
+function find_name(current_activity, phone) {
+    var activities = JSON.parse(localStorage.activities)
+    var bid_info = activities[current_activity].sign_ups
+    var find_info = _.find(bid_info, function (sign_up) {
+        if (sign_up.phone == phone) {
             return sign_up
         }
     })
     return find_info.name
 }
 
-function transform_biddings_to_view_model(current_activity,current_bid){
-    var winner=[],name,unique_bid_array
-    var activities=JSON.parse(localStorage.activities)
-    var bid_info= activities[current_activity].biddings[current_bid]
-    unique_bid_array= get_unique_bid_array(bid_info)
+function transform_biddings_to_view_model(current_activity, current_bid) {
+    var winner = [], name, unique_bid_array
+    var activities = JSON.parse(localStorage.activities)
+    var bid_info = activities[current_activity].biddings[current_bid]
+    unique_bid_array = get_unique_bid_array(bid_info)
     if (unique_bid_array != "") {
-        name=find_name(current_activity,unique_bid_array[0].num[0].phone)
-        unique_bid_array[0].num[0]['name']=name
+        name = find_name(current_activity, unique_bid_array[0].num[0].phone)
+        unique_bid_array[0].num[0]['name'] = name
         winner.push(unique_bid_array[0].num[0])
         return winner
     }
 }
-function get_unique_bid_array(bid_info){
-    var person_bid_group_infos=[],bid_result_count=[],get_unique_bid_array=[]
+function get_unique_bid_array(bid_info) {
+    var person_bid_group_infos = [], bid_result_count = [], get_unique_bid_array = []
     person_bid_group_infos = _.groupBy(bid_info, function (num) {
         return Number(num.price);
     });

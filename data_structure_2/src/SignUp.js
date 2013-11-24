@@ -1,6 +1,6 @@
-function SignUp(name,phone){
-   this.name=name;
-    this.phone=phone;
+function SignUp(name, phone) {
+    this.name = name;
+    this.phone = phone;
 }
 
 SignUp.change_to_obj = function (sms_json) {
@@ -13,7 +13,7 @@ SignUp.change_to_obj = function (sms_json) {
     })
     return SMSObj
 }
-function notify_sms_received(sms_json){
+function notify_sms_received(sms_json) {
     var SMSObj = SignUp.change_to_obj(sms_json)
     var mark = SMSObj.text.substring(0, 2).toUpperCase()
     var phone = SMSObj.phone
@@ -30,18 +30,18 @@ function notify_sms_received(sms_json){
         }
     }
 }
-function process_activity_sign_up(name,phone){
+function process_activity_sign_up(name, phone) {
     var current_sign = new SignUp(name, phone)
-    var activities= JSON.parse(localStorage.activities)
-    if(!SignUp.judge_repeat_name(phone)){
+    var activities = JSON.parse(localStorage.activities)
+    if (!SignUp.judge_repeat_name(phone)) {
         activities[localStorage.current_activity].sign_ups.push(current_sign)
-        localStorage.activities=JSON.stringify(activities)
+        localStorage.activities = JSON.stringify(activities)
     }
 }
 
 SignUp.judge_repeat_name = function (phone) {
     var repeat
-    var activities= JSON.parse(localStorage.activities)
+    var activities = JSON.parse(localStorage.activities)
     _.map(activities[localStorage.current_activity].sign_ups, function (sign_up) {
         if (Number(sign_up.phone) == Number(phone)) {
             repeat = true
@@ -51,7 +51,7 @@ SignUp.judge_repeat_name = function (phone) {
 }
 
 SignUp.render_sign_ups = function (activity_name) {
-    var activities= JSON.parse(localStorage.activities)
+    var activities = JSON.parse(localStorage.activities)
     return activities[localStorage.current_activity].sign_ups
 }
 
