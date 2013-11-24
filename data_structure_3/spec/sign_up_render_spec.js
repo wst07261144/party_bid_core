@@ -14,7 +14,7 @@ describe("SignUp Render", function() {
 
 
     it("should show all signed up users by activity name", function(){
-        var sign_ups = sign_up.render_sign_ups("1");
+        var sign_ups = SignUp.render_sign_ups("1");
 
         expect(sign_ups.length).toBe(3);
         expect(sign_ups[0].name).toBe("仝");
