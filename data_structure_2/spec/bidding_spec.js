@@ -4,34 +4,38 @@ describe("Bidding", function() {
 
     beforeEach(function() {
         init_activity_database();
-        var two_activities = [{
-            name: "first activity",
-            sign_ups: [],
-            bids: [],
-            biddings:{}
-        }, {
-            name: "second activity",
-            sign_ups: [
-                {
-                    name:"仝键",
-                    phone:"13600000000"
-                },
-                {
-                    name:"于硕",
-                    phone:"15600000000"
-                },
-                {
-                    name:"吴京川",
-                    phone:"13800000000"
-                }
-            ],
-            bids:["竞价1"],
-            biddings: {
-                "竞价1": []
-                }
-        }];
+        var two_activities = {
+            '0':{
+                name: "first activity",
+                sign_ups: [],
+                bids: [],
+                biddings:{}
+            } ,
+
+            '1': {
+                name: "second activity",
+                sign_ups: [
+                    {
+                        name:"仝键",
+                        phone:"13600000000"
+                    },
+                    {
+                        name:"于硕",
+                        phone:"15600000000"
+                    },
+                    {
+                        name:"吴京川",
+                        phone:"13800000000"
+                    }
+                ],
+                bids:["竞价1"],
+                biddings: {
+                    "竞价1": []
+                    }
+            }
+        };
         localStorage.activities = JSON.stringify(two_activities);
-        localStorage.current_activity_id = "1";
+        localStorage.current_activity = "1";
         localStorage.current_bid = "竞价1";
         localStorage.is_bidding = "";
     });
