@@ -32,7 +32,6 @@ bidding.get_name = function (bid,phone) {
         return bidding.judge_repeat_name(bid,phone)
     }
 }
-
 bidding.judge_repeat_name = function (bid, phone) {
     var repeat
     var current_bid_info=bidding.find_current_bid_info()
@@ -48,18 +47,18 @@ bidding.judge_repeat_name = function (bid, phone) {
 bidding.save_bid=function(bid,phone){
     var local_activity_list = _.map(JSON.parse(localStorage.activities), function (i_activity) {
         if (i_activity.name == localStorage.current_activity) {
-            _.map(i_activity.bids, function (i_bid) {
-                if (i_bid.name == localStorage.current_bid) {
-                    var bidder = new bidding(localStorage.current_name, phone, bid)
-                    i_bid.biddings.push(bidder)
-                }
-                return i_bid
-            })
+            bidding.save_bid_(i_activity,phone,bid)
         }
         return i_activity
     })
     localStorage.activities = JSON.stringify(local_activity_list)
 }
-
-
-
+bidding.save_bid_=function(activity,phone,bid){
+    var bids= _.map(activity.bids, function (i_bid) {
+        if (i_bid.name == localStorage.current_bid) {
+            var bidder = new bidding(localStorage.current_name, phone, bid)
+            i_bid.biddings.push(bidder)
+        }
+        return i_bid
+    })
+}
