@@ -15,7 +15,6 @@ Bid.create_new_bid = function (current_id) {
     localStorage.bids = JSON.stringify(bids_json)
 }
 
-
 Bid.render_bids = function (current_activity) {
     var bids_json = JSON.parse(localStorage.bids)
     var new_bids_json = _.filter(bids_json, function (bid) {

@@ -3,7 +3,7 @@ function Bidding(bid, phone) {
     this.price = bid;
 }
 
-Bidding.judge_has_signed = function (phone) {
+Bidding.judge_has_signed = function (bid,phone) {
     var signed
     var sign_ups_json = JSON.parse(localStorage.sign_ups)
     var new_sign_ups = _.filter(sign_ups_json, function (sign_up) {
@@ -12,13 +12,11 @@ Bidding.judge_has_signed = function (phone) {
     _.each(new_sign_ups, function (sign_up) {
         if (Number(sign_up.phone) == Number(phone)) {
             signed = true
+            return Bidding.judge_repeat_bid(bid,phone)
         }
     })
-    return signed
-
 }
-
-Bidding.judge_repeat_bid = function (phone) {
+Bidding.judge_repeat_bid = function (bid,phone) {
     var repeat
     var bids_json = JSON.parse(localStorage.bids)
     var new_bid_json = _.filter(bids_json, function (i_bid) {
@@ -30,27 +28,23 @@ Bidding.judge_repeat_bid = function (phone) {
             repeat = true
         }
     })
-    return repeat
-}
-
-function process_bidding(bid, phone) {
-    var new_bid = new Bidding(bid, phone)
-    var bids_json = JSON.parse(localStorage.bids)
-    if (Bidding.judge_has_signed(phone)) {
-        if (!Bidding.judge_repeat_bid(phone)) {
-            var new_bid_json = _.map(bids_json, function (i_bid) {
-                if (i_bid.activity_id == localStorage.current_activity &&
-                    i_bid.name == localStorage.current_bid) {
-                    i_bid.biddings.push(new_bid)
-                }
-                return i_bid
-            })
-            localStorage.bids = JSON.stringify(new_bid_json)
-        }
+    if(!repeat){
+       return Bidding.save_bid(bid,phone)
     }
 }
+Bidding.save_bid=function(bid,phone){
+    var new_bid = new Bidding(bid, phone)
+    var bids_json = JSON.parse(localStorage.bids)
+    var new_bid_json = _.map(bids_json, function (i_bid) {
+        if (i_bid.activity_id == localStorage.current_activity &&
+            i_bid.name == localStorage.current_bid) {
+            i_bid.biddings.push(new_bid)
+        }
+        return i_bid
+    })
+    localStorage.bids = JSON.stringify(new_bid_json)
 
-
+}
 Bidding.render_biddings=function(current_activity,current_bid){
     var unique_bid_array,name ,winner=[]
     var bid_json=JSON.parse(localStorage.bids)
