@@ -29,30 +29,32 @@ bid.get_bid_info = function (activity_name, bid_name) {
     })
 }
 function transform_biddings_to_view_model(activity_name, bid_name) {
-    var bid_result_count = [], get_unique_bid_array = [], person_bid_group_infos, winner = [];
+    var bid_result_count = [], unique_bid_array , person_bid_group_infos, winner = [];
     person_bid_group_infos = _.groupBy(bid.get_bid_info(activity_name, bid_name), function (num) {
         return Number(num.price);
     });
+    unique_bid_array=get_unique_bid_array(person_bid_group_infos)
+    if (unique_bid_array != "") {
+        winner.push(unique_bid_array[0].num[0])
+        return winner
+    }
+}
+function get_unique_bid_array(person_bid_group_infos){
+    var bid_result_count=[],unique_bid_array=[]
     _.map(person_bid_group_infos, function (value, key) {
         var temp = person_bid_group_infos[key] = value;
         bid_result_count.push({"bid": key, "num": temp});
     })
-
     _.map(bid_result_count, function (obj) {
         if (obj.num.length == 1) {
-            get_unique_bid_array.push(obj);
+            unique_bid_array.push(obj);
         }
     })
-    if (get_unique_bid_array != "") {
-        winner.push(get_unique_bid_array[0].num[0])
-        return winner
-    }
+    return unique_bid_array
 }
-
 function transform_bids_to_view_model(activity_name) {
     var activity_info = bidding.find_current_activity_info(activity_name)
     return _.map(activity_info.bids, function (i_bid) {
         return i_bid
     })
 }
-
