@@ -40,7 +40,24 @@ function transform_bids_to_view_model(current_activity) {
     return activities[current_activity].bids
 }
 
-function find_name(current_activity, phone) {
+function transform_biddings_to_view_model(current_activity, current_bid) {
+    var winner = [], unique_bid_array
+    var new_bid_info= Bid.add_name_for_bids(current_activity, current_bid)
+    unique_bid_array = get_unique_bid_array(new_bid_info)
+    if (unique_bid_array != "") {
+        winner.push(unique_bid_array[0].num[0])
+        return winner
+    }
+}
+Bid.add_name_for_bids=function(current_activity, current_bid){
+    var activities = JSON.parse(localStorage.activities)
+    var bid_info = activities[current_activity].biddings[current_bid]
+    return _.map(bid_info,function(i_bid){
+       i_bid['name']=Bid.find_name(current_activity,i_bid.phone)
+        return i_bid
+    })
+}
+Bid.find_name=function(current_activity, phone) {
     var activities = JSON.parse(localStorage.activities)
     var bid_info = activities[current_activity].sign_ups
     var find_info = _.find(bid_info, function (sign_up) {
@@ -49,19 +66,6 @@ function find_name(current_activity, phone) {
         }
     })
     return find_info.name
-}
-
-function transform_biddings_to_view_model(current_activity, current_bid) {
-    var winner = [], name, unique_bid_array
-    var activities = JSON.parse(localStorage.activities)
-    var bid_info = activities[current_activity].biddings[current_bid]
-    unique_bid_array = get_unique_bid_array(bid_info)
-    if (unique_bid_array != "") {
-        name = find_name(current_activity, unique_bid_array[0].num[0].phone)
-        unique_bid_array[0].num[0]['name'] = name
-        winner.push(unique_bid_array[0].num[0])
-        return winner
-    }
 }
 function get_unique_bid_array(bid_info) {
     var person_bid_group_infos = [], bid_result_count = [], get_unique_bid_array = []
