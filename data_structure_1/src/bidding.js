@@ -33,7 +33,6 @@ bidding.judge_repeat_name = function (i_bids, phone) {
     })
     return repeat
 }
-
 function process_bidding(bid, phone) {
     if (bidding.get_name(phone)) {
         var local_activity_list = _.map(JSON.parse(localStorage.activities), function (i_activity) {
@@ -53,3 +52,4 @@ function process_bidding(bid, phone) {
         localStorage.activities = JSON.stringify(local_activity_list)
     }
 }
+
