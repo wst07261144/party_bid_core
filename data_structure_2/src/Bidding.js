@@ -2,18 +2,19 @@ function Bid(phone, price) {
     this.phone = phone;
     this.price = price;
 }
-Bid.judge_has_signed = function (phone) {
+Bid.judge_has_signed = function (bid,phone) {
     var signed
     var activities = JSON.parse(localStorage.activities)
     _.each(activities[localStorage.current_activity].sign_ups, function (sign_up) {
         if (Number(sign_up.phone) == Number(phone)) {
             signed = 'true'
+            return  Bid.judge_repeat_bid(bid,phone)
         }
     })
     return signed
 
 }
-Bid.judge_repeat_bid = function (phone) {
+Bid.judge_repeat_bid = function (bid,phone) {
     var repeat
     var activities = JSON.parse(localStorage.activities)
     _.each(activities[localStorage.current_activity].biddings[localStorage.current_bid]
@@ -22,19 +23,17 @@ Bid.judge_repeat_bid = function (phone) {
                 repeat = 'true'
             }
         })
-    return repeat
-}
-
-function process_bidding(bid, phone) {
-    var activities = JSON.parse(localStorage.activities)
-    var bidder = new Bid(phone, bid)
-    if (Bid.judge_has_signed(phone) == 'true') {
-        if (Bid.judge_repeat_bid(phone) != 'true') {
-            activities[localStorage.current_activity].biddings[localStorage.current_bid].push(bidder)
-            localStorage.activities = JSON.stringify(activities)
-        }
+    if(repeat != 'true'){
+        return Bid.save_bid(bid,phone)
     }
 }
+Bid.save_bid=function(bid,phone){
+    var activities = JSON.parse(localStorage.activities)
+    var bidder = new Bid(phone, bid)
+    activities[localStorage.current_activity].biddings[localStorage.current_bid].push(bidder)
+    localStorage.activities = JSON.stringify(activities)
+}
+
 
 function transform_bids_to_view_model(current_activity) {
     var activities = JSON.parse(localStorage.activities)
