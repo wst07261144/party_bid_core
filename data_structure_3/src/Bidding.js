@@ -3,7 +3,7 @@ function Bidding(bid, phone) {
     this.price = bid;
 }
 
-Bidding.judge_has_signed = function (bid,phone) {
+Bidding.judge_has_signed = function (bid, phone) {
     var signed
     var sign_ups_json = JSON.parse(localStorage.sign_ups)
     var new_sign_ups = _.filter(sign_ups_json, function (sign_up) {
@@ -12,11 +12,11 @@ Bidding.judge_has_signed = function (bid,phone) {
     _.each(new_sign_ups, function (sign_up) {
         if (Number(sign_up.phone) == Number(phone)) {
             signed = true
-            return Bidding.judge_repeat_bid(bid,phone)
+            return Bidding.judge_repeat_bid(bid, phone)
         }
     })
 }
-Bidding.judge_repeat_bid = function (bid,phone) {
+Bidding.judge_repeat_bid = function (bid, phone) {
     var repeat
     var bids_json = JSON.parse(localStorage.bids)
     var new_bid_json = _.filter(bids_json, function (i_bid) {
@@ -28,11 +28,11 @@ Bidding.judge_repeat_bid = function (bid,phone) {
             repeat = true
         }
     })
-    if(!repeat){
-       return Bidding.save_bid(bid,phone)
+    if (!repeat) {
+        return Bidding.save_bid(bid, phone)
     }
 }
-Bidding.save_bid=function(bid,phone){
+Bidding.save_bid = function (bid, phone) {
     var new_bid = new Bidding(bid, phone)
     var bids_json = JSON.parse(localStorage.bids)
     var new_bid_json = _.map(bids_json, function (i_bid) {
@@ -45,25 +45,30 @@ Bidding.save_bid=function(bid,phone){
     localStorage.bids = JSON.stringify(new_bid_json)
 
 }
-Bidding.render_biddings=function(current_activity,current_bid){
-    var unique_bid_array,name ,winner=[]
-    var bid_json=JSON.parse(localStorage.bids)
-    var new_bid_json= _.find(bid_json,function(i_bid){
-        return  i_bid.activity_id==current_activity &&i_bid.name==current_bid
-    })
-    unique_bid_array = get_unique_bid_array(new_bid_json.biddings)
-        if (unique_bid_array != "") {
-        name = find_name(current_activity, unique_bid_array[0].num[0].phone)
-        unique_bid_array[0].num[0]['name'] = name
+Bidding.render_biddings = function (current_activity, current_bid) {
+    var unique_bid_array, name , winner = []
+    var new_bidding = Bidding.add_names_for_bidding(current_activity, current_bid)
+    unique_bid_array = Bidding.get_unique_bid_array(new_bidding)
+    if (unique_bid_array != "") {
         winner.push(unique_bid_array[0].num[0])
         return winner
     }
-
 }
-function find_name(current_activity, phone) {
+Bidding.add_names_for_bidding = function (current_activity, current_bid) {
+    var bid_json = JSON.parse(localStorage.bids)
+    var new_bid_json = _.find(bid_json, function (i_bid) {
+        return  i_bid.activity_id == current_activity && i_bid.name == current_bid
+    })
+    return _.map(new_bid_json.biddings, function (bid) {
+        var name_ = Bidding.find_name(bid.phone)
+        bid['name'] = name_
+        return bid
+    })
+}
+Bidding.find_name = function (phone) {
     var sign_ups_json = JSON.parse(localStorage.sign_ups)
     var new_sign_ups = _.filter(sign_ups_json, function (sign_up) {
-        return sign_up.activity_id == current_activity
+        return sign_up.activity_id == localStorage.current_activity
     })
     var find_info = _.find(new_sign_ups, function (sign_up) {
         if (sign_up.phone == phone) {
@@ -72,10 +77,9 @@ function find_name(current_activity, phone) {
     })
     return find_info.name
 }
-
-function get_unique_bid_array(bid_info) {
-    var person_bid_group_infos = [], bid_result_count = [], get_unique_bid_array = []
-    person_bid_group_infos = _.groupBy(bid_info, function (num) {
+Bidding.get_unique_bid_array = function (bid_info) {
+    var bid_result_count = [], get_unique_bid_array = []
+    var person_bid_group_infos = _.groupBy(bid_info, function (num) {
         return Number(num.price);
     });
     _.map(person_bid_group_infos, function (value, key) {
@@ -89,4 +93,3 @@ function get_unique_bid_array(bid_info) {
     })
     return get_unique_bid_array
 }
-

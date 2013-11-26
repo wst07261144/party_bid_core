@@ -13,26 +13,12 @@ function notify_sms_received(sms_json) {
 
 }
 function process_activity_sign_up(name, phone) {
-    if(localStorage.is_signing_up=='true'){
-        return SignUp.judge_repeat_name(name,phone)
+    if (localStorage.is_signing_up == 'true') {
+        return SignUp.judge_repeat_name(name, phone)
     }
 }
 function process_bidding(bid, phone) {
-//    var new_bid = new Bidding(bid, phone)
-//    var bids_json = JSON.parse(localStorage.bids)
-//    if (Bidding.judge_has_signed(phone)) {
-//        if (!Bidding.judge_repeat_bid(phone)) {
-//            var new_bid_json = _.map(bids_json, function (i_bid) {
-//                if (i_bid.activity_id == localStorage.current_activity &&
-//                    i_bid.name == localStorage.current_bid) {
-//                    i_bid.biddings.push(new_bid)
-//                }
-//                return i_bid
-//            })
-//            localStorage.bids = JSON.stringify(new_bid_json)
-//        }
-//    }
-    if(localStorage.is_bidding == "true"){
-        return Bidding.judge_has_signed(bid,phone)
+    if (localStorage.is_bidding == "true") {
+        return Bidding.judge_has_signed(bid, phone)
     }
 }
