@@ -69,7 +69,7 @@ describe("Bids and Bidding Render", function() {
     })
 
     it("should show all bids", function(){
-        var bids = bid.render_bids("1");
+        var bids = Bid.render_bids("1");
 
         expect(bids.length).toBe(2);
         expect(bids[0].name).toBe("竞价1");
@@ -77,7 +77,7 @@ describe("Bids and Bidding Render", function() {
     });
 
     it("should show minimum not repeatable bidding", function(){
-        var biddings = bidding.render_biddings("1","竞价2");
+        var biddings = Bidding.render_biddings("1","竞价2");
 
         expect(biddings.length).toBe(1);
         expect(biddings[0].name).toBe("于");

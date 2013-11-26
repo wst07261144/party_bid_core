@@ -11,7 +11,3 @@ Activity.prototype.create=function(){
     var id=Number(localStorage.activity_id_generator)+1
     localStorage.activity_id_generator=id
 }
-
-
-
-

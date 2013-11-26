@@ -10,6 +10,30 @@ SignUp.prototype.create=function(){
     localStorage.sign_ups=JSON.stringify(sign_up_json)
 }
 
+SignUp.judge_repeat_name = function (name,phone) {
+    var repeat
+    var current_sign_up= _.filter(JSON.parse(localStorage.sign_ups),function(sign_up){
+        return sign_up.activity_id==localStorage.current_activity
+    })
+    _.each(current_sign_up,function(sign_up){
+        if(sign_up.phone==phone){
+            repeat=true
+        }
+    })
+    if(!repeat){
+        return SignUp.create_activity(name,phone)
+    }
+}
+SignUp.create_activity=function(name,phone){
+    new SignUp(name,phone).create()
+}
+
+SignUp.render_sign_ups = function (activity_name) {
+    var current_sign_up= _.filter(JSON.parse(localStorage.sign_ups),function(sign_up){
+        return sign_up.activity_id==localStorage.current_activity
+    })
+    return  current_sign_up
+}
 SignUp.change_to_obj = function (sms_json) {
     var SMSObj;
     _.each(sms_json.messages, function (message) {
@@ -20,48 +44,4 @@ SignUp.change_to_obj = function (sms_json) {
     })
     return SMSObj
 }
-function notify_sms_received(sms_json) {
-    var SMSObj = SignUp.change_to_obj(sms_json)
-    var mark = SMSObj.text.substring(0, 2).toUpperCase()
-    var phone = SMSObj.phone
-    if (localStorage.is_signing_up == 'true') {
-        if (mark == "BM") {
-            var name = SMSObj.text.substring(2).replace(/^\s+|\s+$/g, '')
-            return process_activity_sign_up(name, phone)
-        }
-    }
-    if (localStorage.is_bidding == "true") {
-        if (mark == 'JJ') {
-            var bid = SMSObj.text.substring(2).replace(/^\s+|\s+$/g, '')
-            return process_bidding(bid, phone)
-        }
-    }
-}
-function process_activity_sign_up(name, phone) {
-    if (!SignUp.judge_repeat_name(phone)) {
-        new SignUp(name,phone).create()
-    }
-}
-
-SignUp.judge_repeat_name = function (phone) {
-    var repeat
-    var current_sign_up= _.filter(JSON.parse(localStorage.sign_ups),function(sign_up){
-        return sign_up.activity_id==localStorage.current_activity
-    })
-    _.each(current_sign_up,function(sign_up){
-        if(sign_up.phone==phone){
-            repeat=true
-        }
-    })
-    return repeat
-}
-
-SignUp.render_sign_ups = function (activity_name) {
-    var current_sign_up= _.filter(JSON.parse(localStorage.sign_ups),function(sign_up){
-        return sign_up.activity_id==localStorage.current_activity
-    })
-    return  current_sign_up
-}
-
-
 

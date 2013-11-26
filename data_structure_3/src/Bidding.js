@@ -17,6 +17,7 @@ Bidding.judge_has_signed = function (phone) {
     return signed
 
 }
+
 Bidding.judge_repeat_bid = function (phone) {
     var repeat
     var bids_json = JSON.parse(localStorage.bids)
@@ -48,6 +49,8 @@ function process_bidding(bid, phone) {
         }
     }
 }
+
+
 Bidding.render_biddings=function(current_activity,current_bid){
     var unique_bid_array,name ,winner=[]
     var bid_json=JSON.parse(localStorage.bids)
